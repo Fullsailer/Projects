@@ -8,7 +8,34 @@ from gui.SelectDevice import *
 from gui.ConfigureRecording import *
 from pygrabber.PyGrabber import *
 from pygrabber.image_process import *
+import threading
+import matplotlib.pyplot as plt
+import numpy as np
+from pygrabber.dshow_graph import FilterGraph
 
+image_done = threading.Event()
+image_grabbed = None
+
+def img_cb(image):
+    global image_done
+    global image_grabbed
+    image_grabbed = np.flip(image, 2)
+    image_done.set()
+
+graph = FilterGraph()
+screen_recorder_id = next(device[0] for device in enumerate(graph.get_input_devices())
+                          if device[1] == "screen-capture-recorder")
+graph.add_input_device(screen_recorder_id)
+graph.add_sample_grabber(img_cb)
+graph.add_null_render()
+graph.prepare()
+graph.run()
+input("Press ENTER to capture a screenshot")
+graph.grab_frame()
+image_done.wait(1000)
+graph.stop()
+plt.imshow(image_grabbed)
+plt.show()
 
 class MainWindow:
     def __init__(self, master):
