@@ -70,21 +70,17 @@
         android:id="@+id/btnGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginBottom="41dp"
+        android:layout_marginStart="162dp"
+        android:layout_marginLeft="162dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginRight="162dp"
+        android:layout_marginBottom="67dp"
         android:text="Guess!"
         app:layout_constraintBottom_toTopOf="@+id/lblOutput"
-        app:layout_constraintEnd_toStartOf="@+id/lblOutput"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtGuess" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="509dp" />
 
     <TextView
         android:id="@+id/lblOutput"
@@ -95,7 +91,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="56dp"
         android:layout_marginRight="56dp"
-        android:layout_marginBottom="247dp"
+        android:layout_marginBottom="175dp"
         android:text="Enter a number, then click Guess!"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -103,5 +99,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGuess" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGuess"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
