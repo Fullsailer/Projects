@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private int numberOfTries;
     private int range = 100;
     private TextView lblRange;
+    private int maxTries = 7;
 
     public void checkGuess() {
         String guessText = txtGuess.getText().toString();
@@ -37,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
             int guess = Integer.parseInt(guessText);
             numberOfTries++;
             if (guess < theNumber)
-                message = guess + " is too low. Try again.";
+                message = guess + " is too low. You have "+(maxTries-numberOfTries)+" tries left.";
             else if (guess > theNumber)
-                message = guess + " is too high. Try again.";
+                message = guess + " is too high. You have "+(maxTries-numberOfTries)+" tries left.";
             else {
                 message = guess +
                         " is correct. You win after " + numberOfTries + " tries!";
@@ -56,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             message = "Enter a whole number between 1 and " + range + ".";
         } finally {
+            if (numberOfTries >= maxTries)
+            {
+                message = "Sorry, you're out of tries. "+theNumber+" was the number.";
+                Toast.makeText(MainActivity.this, message,
+                        Toast.LENGTH_LONG).show();
+                newGame();
+            }
             lblOutput.setText(message);
             txtGuess.requestFocus();
             txtGuess.selectAll();
@@ -64,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void newGame() {
         theNumber = (int) (Math.random() * range + 1);
+        maxTries=(int)(Math.log(range)/Math.log(2)+1);
+        numberOfTries = 0;
         lblRange.setText("Enter a number between 1 and " + range + ".");
         txtGuess.setText("" + range / 2);
         txtGuess.requestFocus();
@@ -81,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         range = preferences.getInt("range", 100);
+        maxTries=(int)(Math.log(range)/Math.log(2)+1);
         newGame();
         btnGuess.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -160,9 +171,13 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences preferences =
                         PreferenceManager.getDefaultSharedPreferences(this);
                 int gamesWon = preferences.getInt("gamesWon", 0);
+                int gamesLost = preferences.getInt("gamesLost", 0);
+                int total = gamesLost + gamesWon;
+                int percent = Math.round((gamesWon * 100.0f)/(total));
                 AlertDialog statDialog = new AlertDialog.Builder(MainActivity.this).create();
                 statDialog.setTitle("Guessing Game Stats");
-                statDialog.setMessage("You have won " + gamesWon + " games. Way to go!");
+                statDialog.setMessage("You have won " + gamesWon + " out of " + total +
+                        " games, " + percent + "%! \nWay to go!");
                 statDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
